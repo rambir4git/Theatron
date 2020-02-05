@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/flash"
+        android:title="Flash"
+        android:icon="@drawable/ic_flash_off_black_24dp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/mode"
+        android:title="Switch mode"
+        android:icon="@drawable/ic_camera_alt_black_24dp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/flip"
+        android:title="Flip Camera"
+        android:icon="@drawable/ic_camera_rear_black_24dp"
+        app:showAsAction="always" />
+
+</menu>

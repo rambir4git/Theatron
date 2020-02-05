@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7E57C2</color>
+    <color name="colorPrimaryDark">#4527A0</color>
+    <color name="colorAccent">#311B92</color>
+    <color name="gray">#c2c2c2</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="liked">#FFA000</color>
+    <color name="commented">#0288D1</color>
+    <color name="shared">#D32F2F</color>
+</resources>

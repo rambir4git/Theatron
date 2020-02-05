@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "463164665246",
+    "firebase_url": "https://theatron-b8992.firebaseio.com",
+    "project_id": "theatron-b8992",
+    "storage_bucket": "theatron-b8992.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463164665246:android:269bae4053004521977a8f",
+        "android_client_info": {
+          "package_name": "com.example.theatrondemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463164665246-cr17cvblktb9e2nql9flul9mnagpm8r2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.theatrondemo",
+            "certificate_hash": "b57b7610c04454ac899bef423a34862734365994"
+          }
+        },
+        {
+          "client_id": "463164665246-bd9tdteggfq90b1ueb3iqsclnrnvuq2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfmaJZWlZ1MyfE-XWFyw94rAPuRyxsyGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463164665246-bd9tdteggfq90b1ueb3iqsclnrnvuq2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
