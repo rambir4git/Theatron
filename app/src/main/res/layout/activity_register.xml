@@ -8,41 +8,32 @@
     tools:context=".RegisterActivity">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="8dp"
+        android:layout_margin="@dimen/standard_margin"
         android:text="Register"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@android:color/black"
-        android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/trans_profile"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_marginTop="76dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
         android:src="@mipmap/ic_launcher_round"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <EditText
         android:id="@+id/new_name"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:drawablePadding="20dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
         android:hint="Enter display name"
         android:inputType="textPersonName"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trans_profile" />
@@ -50,15 +41,11 @@
     <EditText
         android:id="@+id/new_email"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
         android:drawableStart="@android:drawable/sym_action_email"
-        android:drawablePadding="20dp"
         android:hint="Enter email"
         android:inputType="textEmailAddress"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_name" />
@@ -66,15 +53,11 @@
     <EditText
         android:id="@+id/new_pass"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
         android:drawableStart="@android:drawable/ic_secure"
-        android:drawablePadding="20dp"
         android:hint="Enter password"
         android:inputType="textVisiblePassword"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_email" />
@@ -82,15 +65,11 @@
     <Button
         android:id="@+id/new_signUp"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_margin="16dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
         android:text="Sign Up"
-        android:textAllCaps="false"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_pass" />
 

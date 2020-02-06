@@ -3,19 +3,20 @@ package com.example.theatrondemo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.paging.PagedList;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +26,7 @@ import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -37,6 +39,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
@@ -59,7 +62,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
@@ -70,6 +73,7 @@ public class HomeFragment extends Fragment {
                 .setCancelable(false)
                 .setContext(getActivity())
                 .setMessage("Making post")
+                .setTheme(R.style.Theme_MaterialComponents_Dialog_Alert)
                 .build();
         /*
         button.setOnClickListener(new View.OnClickListener() {
@@ -101,56 +105,12 @@ public class HomeFragment extends Fragment {
             @NonNull
             @Override
             public SocialPostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                Log.d(TAG, "onCreateViewHolder: card layour inflated");
                 return new SocialPostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_social_post, parent, false));
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final SocialPostHolder holder, int position, @NonNull final SocialPost model) {
-                Glide.with(getActivity()).load(model.getMedia()).into(holder.imageView);
-                if (!model.getViews().contains(auth.getUid())) {
-                    db.collection("ALL POSTS")
-                            .document(model.getPostID())
-                            .update("views", FieldValue.arrayUnion(auth.getUid()))
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "onSuccess: views updated.");
-                                }
-                            });
-                }
-                String views = "Views: " + model.getViews().size();
-                holder.viewsCount.setText(views);
-                if (model.getLikes().contains(auth.getUid()))
-                    holder.likeBtn.setCircleBackgroundColor(getResources().getColor(R.color.liked));
-                holder.likeBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        likePost(model);
-                        holder.likeBtn.setCircleBackgroundColor(getResources().getColor(R.color.liked));
-                    }
-                });
-                holder.commentBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        commentInput(model);
-                    }
-                });
-                if (model.getShares().contains(auth.getUid()))
-                    holder.shareBtn.setCircleBackgroundColor(getResources().getColor(R.color.shared));
-                holder.shareBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sharePost(model);
-                        holder.shareBtn.setCircleBackgroundColor(getResources().getColor(R.color.shared));
-                    }
-                });
-                holder.imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getActivity(), "Make frame to display full image", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                setCardDetails(holder, model);
             }
 
             @Override
@@ -160,8 +120,6 @@ public class HomeFragment extends Fragment {
             }
         };
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
         try {
@@ -171,6 +129,87 @@ public class HomeFragment extends Fragment {
             Log.d(TAG, "onCreateView: normal start");
         }
         return view;
+    }
+
+    private void setCardDetails(final SocialPostHolder holder, final SocialPost model) {
+        Glide.with(getActivity()).load(model.getMedia()).into(holder.imageBtn);
+        Glide.with(getActivity()).load(auth.getCurrentUser().getPhotoUrl()).into(holder.profileIcon);
+        holder.description.setText(model.getTitle());
+        holder.opName.setText(auth.getCurrentUser().getDisplayName());
+        holder.timestamp.setText(model.getTimestamp().toDate().toString().substring(0, 16));
+        updateViews(holder.viewsBtn, model.getViews());
+        updateLikes(holder.likeBtn, model.getLikes(), false);
+        updateShares(holder.shareBtn, model.getShares(), false);
+        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commentInput(model);
+            }
+        });
+        holder.imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Make frame to display full image", Toast.LENGTH_SHORT).show();
+            }
+        });
+        db.collection("ALL POSTS")
+                .document(model.getPostID())
+                .set(model);
+    }
+
+    private void updateShares(final MaterialButton shareBtn, final List<String> shares, boolean recursiveCall) {
+        if (shares.contains(auth.getUid())) {
+            shareBtn.setIcon(getResources().getDrawable(R.drawable.ic_people_outline_filled_24px, null));
+            shareBtn.setIconTint(ColorStateList.valueOf(getResources().getColor(R.color.shared, null)));
+            shareBtn.setText(": " + shares.size());
+            shareBtn.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.shared, null)));
+        } else if (recursiveCall) {
+            shareBtn.setIcon(getResources().getDrawable(R.drawable.ic_people_outline_24px, null));
+            shareBtn.setIconTint(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, null)));
+            shareBtn.setText(": " + shares.size());
+            shareBtn.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, null)));
+            return;
+        }
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!shares.contains(auth.getUid()))
+                    shares.add(auth.getUid());
+                else shares.remove(auth.getUid());
+                updateShares(shareBtn, shares, true);
+            }
+        });
+    }
+
+    private void updateLikes(final MaterialButton likeBtn, final List<String> likes, boolean recursiveCall) {
+        if (likes.contains(auth.getUid())) {
+            likeBtn.setIcon(getResources().getDrawable(R.drawable.ic_whatshot_filled_24px, null));
+            likeBtn.setIconTint(ColorStateList.valueOf(getResources().getColor(R.color.liked, null)));
+            likeBtn.setText(": " + likes.size());
+            likeBtn.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.liked, null)));
+        } else if (recursiveCall) {
+            likeBtn.setIcon(getResources().getDrawable(R.drawable.ic_whatshot_24px, null));
+            likeBtn.setIconTint(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, null)));
+            likeBtn.setText(": " + likes.size());
+            likeBtn.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, null)));
+            return;
+        }
+        likeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!likes.contains(auth.getUid()))
+                    likes.add(auth.getUid());
+                else likes.remove(auth.getUid());
+                updateLikes(likeBtn, likes, true);
+            }
+        });
+    }
+
+    private void updateViews(final Button viewsBtn, final List<String> views) {
+        if (!views.contains(auth.getUid())) {
+            views.add(auth.getUid());
+        }
+        viewsBtn.setText(String.valueOf(views.size()));
     }
 
     private void likePost(SocialPost socialPost) {
