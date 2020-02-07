@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db;
     FirebaseAuth auth;
     FirestorePagingAdapter adapter;
+    HomeFragment homfragment;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -64,7 +65,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        homfragment = HomeFragment.this;
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance().getReference("media");
@@ -73,7 +74,6 @@ public class HomeFragment extends Fragment {
                 .setCancelable(false)
                 .setContext(getActivity())
                 .setMessage("Making post")
-                .setTheme(R.style.Theme_MaterialComponents_Dialog_Alert)
                 .build();
         /*
         button.setOnClickListener(new View.OnClickListener() {
@@ -359,6 +359,7 @@ public class HomeFragment extends Fragment {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         Log.d(TAG, "onComplete: completed");
                                         alertDialog.dismiss();
+                                        getFragmentManager().beginTransaction().detach(homfragment).attach(homfragment).commit();
                                     }
                                 });
                             }

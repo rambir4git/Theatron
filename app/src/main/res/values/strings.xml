@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TheatronDemo</string>
+    <string name="app_name">Social Media Demo</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_profile">Profile</string>
