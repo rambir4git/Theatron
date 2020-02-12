@@ -32,14 +32,14 @@
                 android:layout_marginTop="8dp"
                 android:text="General"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Name"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/show_name"
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Email"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/show_email"
@@ -81,14 +81,14 @@
                 android:layout_marginTop="8dp"
                 android:text="Language and Country"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Language"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Country"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -128,7 +128,7 @@
                 android:layout_marginTop="8dp"
                 android:text="Account"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/acc_id"

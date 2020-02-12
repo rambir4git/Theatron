@@ -21,11 +21,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import dmax.dialog.SpotsDialog;
 
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private SignInButton googleSignIn;
     private TextView register;
     private FirebaseAuth mainAuth;
+    private FirebaseFirestore firestore;
     private AlertDialog alertDialog;
     private FirebaseAuth.AuthStateListener authStateListener;
 
@@ -51,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         final GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         alertDialog = new SpotsDialog.Builder()
                 .setContext(MainActivity.this)
                 .setMessage("Logging in...")
@@ -59,10 +62,33 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                    finish();
+                    alertDialog.show();
+                    firestore = FirebaseFirestore.getInstance();
+                    firestore.collection("ALL USERS")
+                            .whereEqualTo("id", firebaseAuth.getCurrentUser().getUid())
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    if (queryDocumentSnapshots.size() == 1) {
+                                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                        finish();
+                                    } else {
+                                        AppUser appUser = new AppUser();
+                                        appUser.setDisplay(firebaseAuth.getCurrentUser().getDisplayName());
+                                        appUser.setProfilePic(firebaseAuth.getCurrentUser().getPhotoUrl().toString());
+                                        appUser.setId(firebaseAuth.getCurrentUser().getUid());
+                                        firestore.collection("ALL USERS")
+                                                .document(appUser.getId())
+                                                .set(appUser);
+                                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                        finish();
+                                    }
+                                    alertDialog.dismiss();
+                                }
+                            });
                 }
             }
         };

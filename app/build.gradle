@@ -29,7 +29,6 @@ dependencies {
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
     api 'com.otaliastudios:cameraview:2.6.1'
-    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
     implementation 'androidx.paging:paging-runtime:2.1.1'
 

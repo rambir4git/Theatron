@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
-import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +25,6 @@ public class HomeActivity extends AppCompatActivity {
     private ProfileFragment profileFragment;
     private FirebaseAuth homeAuth;
     private PermissionManager permissionManager;
-    private FFmpeg ffmpeg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +38,6 @@ public class HomeActivity extends AppCompatActivity {
         permissionManager.checkAndRequestPermissions(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.app_name);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         // FRAGMENTS
@@ -70,34 +61,11 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        ffmpeg = FFmpeg.getInstance(this);
-        try {
-            ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
-                @Override
-                public void onStart() {
-                }
-
-                @Override
-                public void onFailure() {
-                }
-
-                @Override
-                public void onSuccess() {
-                    Log.d("FFMPEG", "onSuccess: Successfully loaded.");
-                }
-
-                @Override
-                public void onFinish() {
-                }
-            });
-        } catch (FFmpegNotSupportedException e) {
-            e.printStackTrace();
-        }
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/* video/*");
+                intent.setType("image/*");
                 startActivityForResult(intent, 123);
             }
         });
@@ -114,38 +82,6 @@ public class HomeActivity extends AppCompatActivity {
                 args.putParcelable("Uri", selectedMediaUri);
                 fragment.setArguments(args);
                 ChangeFragment(fragment);
-            } else if (selectedMediaUri.toString().contains("video")) {
-                try {
-                    ffmpeg.execute(new String[]{"-version"}, new FFmpegExecuteResponseHandler() {
-                        @Override
-                        public void onSuccess(String message) {
-                            Log.d("FFMPEG", "onSuccess: " + message);
-                            Toast.makeText(HomeActivity.this, "FFMPEG cli is present, write script for compression", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onProgress(String message) {
-
-                        }
-
-                        @Override
-                        public void onFailure(String message) {
-
-                        }
-
-                        @Override
-                        public void onStart() {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-
-                        }
-                    });
-                } catch (FFmpegCommandAlreadyRunningException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

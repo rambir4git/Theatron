@@ -11,6 +11,7 @@ public class SocialPost {
     private String creatorID;
     private String postID;
     private List<String> likes;
+    private List<String> commentators;
     private List<String> shares;
     private List<String> views;
     private Timestamp timestamp;
@@ -26,6 +27,7 @@ public class SocialPost {
         this.postID = postID;
         this.timestamp = timestamp;
         likes = new ArrayList<>();
+        commentators = new ArrayList<>();
         shares = new ArrayList<>();
         views = new ArrayList<>();
     }
@@ -84,6 +86,14 @@ public class SocialPost {
         this.likes = likes;
     }
 
+    public List<String> getCommentators() {
+        return commentators;
+    }
+
+    public void setCommentators(List<String> commentators) {
+        this.commentators = commentators;
+    }
+
     public void setShares(List<String> shares) {
         this.shares = shares;
     }
@@ -99,14 +109,18 @@ public class SocialPost {
     public static class Comment {
         String message;
         String userId;
+        String commentMedia;
+        Timestamp timestamp;
 
         public Comment() {
             //required for firestore
         }
 
-        public Comment(String message, String userId) {
+        public Comment(String message, String userId, String commentMedia, Timestamp timestamp) {
             this.message = message;
             this.userId = userId;
+            this.commentMedia = commentMedia;
+            this.timestamp = timestamp;
         }
 
         public String getMessage() {
@@ -123,6 +137,22 @@ public class SocialPost {
 
         public void setUserId(String userId) {
             this.userId = userId;
+        }
+
+        public Timestamp getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(Timestamp timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public String getCommentMedia() {
+            return commentMedia;
+        }
+
+        public void setCommentMedia(String commentMedia) {
+            this.commentMedia = commentMedia;
         }
     }
 }

@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         newEmail = findViewById(R.id.new_email);
         newPassword = findViewById(R.id.new_pass);
         create = findViewById(R.id.new_signUp);
-        storageReference = FirebaseStorage.getInstance().getReference("images");
+        storageReference = FirebaseStorage.getInstance().getReference("profile pics");
         regAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -87,12 +87,14 @@ public class RegisterActivity extends AppCompatActivity {
                                                         .setDisplayName(name)
                                                         .setPhotoUri(uri)
                                                         .build();
-                                                regAuth.getCurrentUser().updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        progressDialog.dismiss();
-                                                    }
-                                                });
+                                                AppUser appUser = new AppUser();
+                                                appUser.setId(regAuth.getCurrentUser().getUid());
+                                                appUser.setDisplay(regAuth.getCurrentUser().getDisplayName());
+                                                appUser.setProfilePic(uri.toString());
+                                                firestore.collection("ALL USERS")
+                                                        .document(appUser.getId())
+                                                        .set(appUser);
+                                                progressDialog.dismiss();
                                             }
                                         });
                                     }
